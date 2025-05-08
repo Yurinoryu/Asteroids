@@ -41,7 +41,12 @@ def main():
             else:
                 obj.update(dt)
 
-
+        for asteroid in asteroids:
+            for shot in shots:
+                if asteroid.position.distance_to(shot.position) <= (asteroid.radius + shot.radius):
+                    asteroid.split()
+                    shot.kill()
+                    break
 
         for asteroid in asteroids:
             if asteroid.collides_with(player):

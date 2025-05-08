@@ -5,11 +5,13 @@ from Shots import Shot
 
 white = (255,255,255)
 
+
 class Player(CircleShape):
         def __init__(self, x, y):
             super().__init__(x, y, PLAYER_RADIUS)
 
             self.rotation = 0
+            self.shot_timer = 0
 
 
         # Shape of player.
@@ -39,6 +41,8 @@ class Player(CircleShape):
 
         def update(self, dt, shots):
             keys = pygame.key.get_pressed()
+            if self.shot_timer > 0:
+                self.shot_timer -= dt
 
             if keys[pygame.K_a]:
                 self.rotate(-dt)  # Rotate left by passing negative dt
@@ -48,7 +52,8 @@ class Player(CircleShape):
                 self.move(dt, direction=1)  # Forward
             if keys[pygame.K_s]:
                 self.move(dt, direction=-1)  # Backward
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_SPACE] and self.shot_timer <= 0:
                 shot = self.shoot()
                 shots.add(shot)
+                self.shot_timer = PLAYER_SHOOT_COOLDOWN
 
